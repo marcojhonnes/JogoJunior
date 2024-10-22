@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Vamos Tabular!</h1>
+    <h1 id="pergunta"></h1>
+    <input id="nome" type="text" placeholder="Nome do Guerreiro">
+    <input id="numero" type="number" placeholder="Digite um numero">
+    <input id="resposta" type="number" placeholder="RESPOSTA">
+    <button id="btn">Calcular</button>
+    <p id="resultado"></p>
+    <script>
+        const guerreiro = document.getElementById('nome')
+        const numero = document.getElementById('numero').value
+        let questao = document.getElementById('pergunta')
+        const paragrafo = document.getElementById('resultado')
+        let botao = document.getElementById('btn')
+        function tabular() {
+        for(let i = 1; i < 11; i++) {
+            const numero = document.getElementById('numero').value 
+            const resposta = document.getElementById('resposta').value
+            
+            let total = i * numero 
+            if(total == resposta) {
+                paragrafo.innerText = `resposta Correta è ${total}. Ótimo golpe guerreiro!`
+            } else {
+                paragrafo.innerText = `resposta Correta è ${total}. voce errou guerreiro!`
+            }
+           
+            console.log(multiplicar)
+        }
+        
+        paragrafo.innerText = ressul
+        }
+        botao.addEventListener('click', tabular)
+
+    </script>
+</body>
+</html>

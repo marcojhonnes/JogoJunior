@@ -75,6 +75,20 @@ h2 {
     color: blue;
 }
 
+#options button {
+    margin: 10px; /* Espaçamento de 10 pixels em todas as direções */
+    padding: 10px; /* Ajusta o preenchimento do botão */
+    font-size: 16px; /* Ajusta o tamanho da fonte */
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
+button {
+    margin: 10px; /* Espaçamento de 10 pixels em todas as direções */
+    padding: 10px; /* Ajusta o preenchimento do botão */
+    font-size: 16px; /* Ajusta o tamanho da fonte */
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
 /* Estilos responsivos */
 @media (max-width: 600px) {
     .container {
@@ -96,4 +110,3 @@ h2 {
         padding: 10px;
     }
 }
-.

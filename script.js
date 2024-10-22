@@ -127,6 +127,7 @@ function showNextQuestion() {
 // Função para desabilitar opções após responder
 function disableOptions() {
     const buttons = optionsElement.querySelectorAll('button');
+    buttons.style.margin
     buttons.forEach(button => {
         button.disabled = true;
     });
