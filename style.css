@@ -101,6 +101,20 @@ button {
         padding: 15px;
     }
 
+    #options button {
+    margin: 10px; /* Espaçamento de 10 pixels em todas as direções */
+    padding: 10px; /* Ajusta o preenchimento do botão */
+    font-size: 16px; /* Ajusta o tamanho da fonte */
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
+button {
+    margin: 10px; /* Espaçamento de 10 pixels em todas as direções */
+    padding: 10px; /* Ajusta o preenchimento do botão */
+    font-size: 16px; /* Ajusta o tamanho da fonte */
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+}
+
     #ranking-section {
         width: 180px;
         padding: 8px;
@@ -110,3 +124,7 @@ button {
         padding: 10px;
     }
 }
+<<<<<<< HEAD
+=======
+.
+>>>>>>> 1f3bfe0401330b723b23c51f6f326be4c3e013cd

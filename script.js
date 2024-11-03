@@ -6,11 +6,11 @@ const questions = {
     'Subtração - Avançada': generateQuestions('-', 50, 10, 99, true),
     Multiplicação: generateQuestions('*', 50, 1, 10),
     'Multiplicação - Avançada': generateQuestions('*', 50, 10, 99, false, 1, 9),
-    Divisão: generateQuestions('/', 50, 1, 10),
+    Divisão: generateQuestions('/', 50, 1, 10, true), // Garante resultados inteiros e positivos
     Geografia: generateGeographyQuestions(40)
 };
 
-// Define as fases do jogo
+// Define as fases do jogo (Geografia é a última fase)
 const phases = [
     'Adição',
     'Adição - Avançada',
@@ -127,7 +127,6 @@ function showNextQuestion() {
 // Função para desabilitar opções após responder
 function disableOptions() {
     const buttons = optionsElement.querySelectorAll('button');
-    buttons.style.margin
     buttons.forEach(button => {
         button.disabled = true;
     });
@@ -168,8 +167,7 @@ function endPhase() {
         phaseScore = correctAnswers; // 1 ponto por resposta certa
     } else if (['Geografia'].includes(phases[currentPhaseIndex])) {
         phaseScore = correctAnswers * 3;
-    }
-    else {
+    } else {
         phaseScore = correctAnswers * 2; // 2 pontos por resposta certa nas outras fases
     }
     totalScore += phaseScore; // Atualiza a pontuação total
@@ -226,31 +224,25 @@ function restartGame() {
 function generateQuestions(operation, numQuestions, minRange = 1, maxRange = 10, positiveResult = false, minSecond = 1, maxSecond = 10) {
     const questions = [];
     for (let i = 0; i < numQuestions; i++) {
-        const a = getRandomInt(minRange, maxRange);
-        const b = getRandomInt(minSecond, maxSecond);
-        let correctAnswer;
-        let operationSymbol = operation;
+        let a, b, correctAnswer;
 
-        switch (operation) {
-            case '+':
-                correctAnswer = a + b;
-                break;
-            case '-':
-                correctAnswer = positiveResult ? Math.abs(a - b) : a - b;
-                break;
-            case '*':
-                correctAnswer = a * b;
-                operationSymbol = 'x';
-                break;
-            case '/':
-                correctAnswer = Math.floor(a / b);
-                operationSymbol = '÷';
-                break;
+        if (operation === '/') {
+            // Gera questões de divisão com resultado inteiro
+            b = getRandomInt(minRange, maxRange); // Divisor
+            correctAnswer = getRandomInt(minSecond, maxSecond); // Resposta inteira
+            a = b * correctAnswer; // Garante que a divisão será exata
+        } else {
+            a = getRandomInt(minRange, maxRange);
+            b = getRandomInt(minSecond, maxSecond);
+            if (positiveResult && a < b) [a, b] = [b, a]; // Garante resultado positivo para subtração
+            correctAnswer = eval(`${a} ${operation} ${b}`);
         }
 
+        const questionText = `Quanto é ${a} ${operation === '*' ? 'x' : operation} ${b}?`;
         const options = generateOptions(correctAnswer);
+
         questions.push({
-            question: `Quanto é ${a} ${operationSymbol} ${b}?`,
+            question: questionText,
             options: options,
             correctAnswerIndex: options.indexOf(correctAnswer)
         });
@@ -258,7 +250,7 @@ function generateQuestions(operation, numQuestions, minRange = 1, maxRange = 10,
     return questions;
 }
 
-// Função para gerar perguntas de geografia
+// Função para gerar questões de geografia
 function generateGeographyQuestions(numQuestions) {
     // Perguntas de exemplo (podem ser personalizadas)
     const questions = [
@@ -314,15 +306,76 @@ function generateGeographyQuestions(numQuestions) {
             correctAnswerIndex: 1
         },
         {
-            question: 'Qual a planta que fornece o Alcool?',
+            question: 'Qual planta nos fornece o Alcool?',
             options: ['A Macieira', 'A Cana de Alcool','A Cana de Açucar', 'O Trigo'],
             correctAnswerIndex: 2
         },
         
+        {
+            question: 'Qual fruta é colhida da Macieira?',
+            options: ['A Macã','A Uva', 'A Melancia', 'O Abacate'],
+            correctAnswerIndex: 0
+        },
+        {
+            question: 'Qual dessas frutas não nasce em arvores?',
+            options: ['A Goiaba', 'O Abacaxi','A Laranja', 'A Manga'],
+            correctAnswerIndex: 1
+        },
+        {
+            question: 'Qual dessas frutas nasce em arvores?',
+            options: ['A Goiaba','A Uva', 'A Melancia', 'A Pitaya'],
+            correctAnswerIndex: 0
+        },
+        {
+            question: 'Qual continente tem a maior diversidade de animais selvagens?',
+            options: ['América do Sul', 'Europa', 'Ásia', 'África' ],
+            correctAnswerIndex: 3
+        },
+        {
+            question: 'Qual é a capital do estado de São Paulo?',
+            options: ['Campinas', 'Santos', 'Ribeirão Preto','São Paulo' ],
+            correctAnswerIndex: 3
+        },
+        {
+            question: 'Qual é o rio mais longo do Brasil?',
+            options: ['Rio Amazonas', 'Rio São Francisco', 'Rio Paraná', 'Rio Tocantins' ],
+            correctAnswerIndex: 0
+        },
+        {
+            question: 'Qual dos estados brasileiros é o mais ao sul do país?',
+            options: ['Paraná', 'Santa Catarina', 'Rio Grande do Sul','São Paulo' ],
+            correctAnswerIndex: 2
+        },
+        {
+            question: 'Qual é o nome dado às grandes áreas de gelo encontradas nos polos da Terra?',
+            options: ['Geleiras', 'Desertos de Gelo', 'Nevascas', 'Icebergs' ],
+            correctAnswerIndex: 0
+        },
+        {
+            question: 'Qual é o maior país do mundo em extensão territorial?',
+            options: ['Canadá', 'China', 'Estados Unidos', 'Russia' ],
+            correctAnswerIndex: 0
+        },
         // Adicione mais perguntas de geografia conforme necessário
     ];
 
     return shuffleArray(questions).slice(0, numQuestions); // Retorna um número de perguntas embaralhadas
+}
+
+
+// Função para gerar opções
+function generateOptions(correctAnswer) {
+    const options = [correctAnswer];
+    while (options.length < 4) {
+        const option = correctAnswer + getRandomInt(-10, 10);
+        if (!options.includes(option)) options.push(option);
+    }
+    return shuffleArray(options);
+}
+
+// Função para obter número aleatório
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // Função para embaralhar um array
@@ -332,22 +385,4 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
-}
-
-// Função para gerar opções de respostas
-function generateOptions(correctAnswer) {
-    const options = new Set();
-    options.add(correctAnswer);
-
-    while (options.size < 4) {
-        const randomOption = correctAnswer + getRandomInt(-10, 10);
-        options.add(randomOption);
-    }
-
-    return shuffleArray(Array.from(options));
-}
-
-// Função para obter um inteiro aleatório
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
